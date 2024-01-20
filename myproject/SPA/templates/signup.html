@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+    <title>WoodWonders</title>
+    {% load static %}
+    <style>
+        body {
+            background-image: url('{% static "images/loginbg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Josefin Sans;
+        }
+
+
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            color: black;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+
+        }
+
+        button {
+            background-color: #000000;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-family: Josefin Sans;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #captcha {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        #signupLink {
+            text-align: center;
+            margin-top: 10px;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container login-container">
+    <h2><center>Sign Up</center></h2>
+    <form id="loginForm" onsubmit="return validateForm('loginForm')">
+        <label for="username"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
+        <small>Password should be at least 8 characters, contain 1 symbol, 1 capital letter, and 1 number.</small>
+<br>
+        <br>
+        <label for="confirmPassword"><b>Confirm Password</b></label>
+        <input type="password" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" required>
+        <div id="captcha">
+            <input type="text" placeholder="Enter Captcha" name="captcha" id="captchaInput" required>
+            <span id="captchaText"></span>
+        </div>
+
+        <button type="submit">Sign Up</button>
+
+
+    </form>
+</div>
+
+<script>
+    function generateCaptcha() {
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var captcha = '';
+        for (var i = 0; i < 4; i++) {
+            var randomIndex = Math.floor(Math.random() * characters.length);
+            captcha += characters.charAt(randomIndex);
+        }
+        return captcha;
+    }
+
+    document.getElementById("captchaText").innerText = generateCaptcha();
+
+    function validateForm(formId) {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        var captchaInput = document.getElementById("captchaInput").value;
+        var captchaText = document.getElementById("captchaText").innerText;
+
+        if (username === "" || password === "" || comfirmPassword === "" || captchaInput === "") {
+            alert("Username, password, confirmPassword and captcha are required");
+            return false;
+        }
+
+        var passwordRegex = /^(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            alert("Password should be at least 8 characters, contain 1 symbol, 1 capital letter, and 1 number.");
+            return false;
+        }
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return false;
+        }
+
+        if (captchaInput.toUpperCase() !== captchaText) {
+            alert("Incorrect captcha");
+            return false;
+        }
+        document.getElementById("captchaText").innerText = generateCaptcha();
+        return true;
+    }
+</script>
+</body>
+</html>
